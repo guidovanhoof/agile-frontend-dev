@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Install Dependencies
-        run: npm run install --frozen-lockfile
+        run: npm install --frozen-lockfile
       - name: Unit Tests
         run: npm run test:unit
       - name: E2E tests
