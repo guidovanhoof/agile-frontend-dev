@@ -1,15 +1,16 @@
 <template>
   <div>
-    RestaurantList
-    <ul>
-      <li
-        v-for="restaurant in restaurants"
-        :key="restaurant.id"
-        data-testid="restaurant"
-      >
-        {{ restaurant.name }}
-      </li>
-    </ul>
+    <v-list-item
+      v-for="restaurant in restaurants"
+      :key="restaurant.id"
+      data-testid="restaurant"
+    >
+      <v-list-item-content>
+        <v-list-item-title>
+          {{ restaurant.name }}
+        </v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
   </div>
 </template>
 
