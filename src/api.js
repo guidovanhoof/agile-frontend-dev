@@ -7,6 +7,7 @@ const client = axios.create({
 
 const api = {
   loadRestaurants() {
+    console.log('loadRestaurants()');
     return client.get('/restaurants').then(response => response.data);
   },
 };
