@@ -21,10 +21,10 @@ describe('RestaurantList', () => {
   let restaurantsModule;
   let component;
 
-  beforeEach(() => {
+  const mountWithStore = (state = {records, loading: false}) => {
     restaurantsModule = {
       namespaced: true,
-      state: {records},
+      state,
       actions: {
         load: jest.fn().mockName('load'),
       },
@@ -36,14 +36,46 @@ describe('RestaurantList', () => {
     });
 
     component = mount(RestaurantList, {localVue, store});
+  };
+
+  describe('when loading succeeds', () => {
+    beforeEach(() => {
+      mountWithStore();
+    });
+
+    it('displays the restaurants', () => {
+      expect(findByTestId(component, 'restaurant', 0).text()).toBe('Sushi Place');
+      expect(findByTestId(component, 'restaurant', 1).text()).toBe('Pizza Place');
+    });
+
+    it('does not display the loading indicator while not loading', () => {
+      expect(component.find('[data-testid="loading-indicator"]').exists()).toBe(false);
+    });
+
+    it('does not display the error message', () => {
+      expect(component.find('[data-testid="loading-error"]').exists()).toBe(false);
+    });
   });
 
   it('loads restaurants on mount', () => {
+    mountWithStore();
     expect(restaurantsModule.actions.load).toHaveBeenCalled();
   });
 
-  it('displays the restaurants', () => {
-    expect(findByTestId(component, 'restaurant', 0).text()).toBe('Sushi Place');
-    expect(findByTestId(component, 'restaurant', 1).text()).toBe('Pizza Place');
+  it('displays the loading indicator while loading', () => {
+    mountWithStore({loading: true});
+    expect(component.find('[data-testid="loading-indicator"]').exists()).toBe(true);
+  });
+
+  describe('when loading fails', () => {
+    it('displays the error message', () => {
+      mountWithStore({loadError: true});
+      expect(component.find('[data-testid="loading-error"]').exists()).toBe(true);
+    });
+
+    it('does not display the error message', () => {
+      mountWithStore({loadError: false});
+      expect(component.find('[data-testid="loading-error"]').exists()).toBe(false);
+    });
   });
 });
